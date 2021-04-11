@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Jaaculator</string>
+    <string name="title_activity_member_list">MemberListActivity</string>
+</resources>
