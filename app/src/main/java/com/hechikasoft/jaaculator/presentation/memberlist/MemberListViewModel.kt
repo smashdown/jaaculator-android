@@ -1,24 +1,25 @@
 package com.hechikasoft.jaaculator.presentation.memberlist
 
-import androidx.lifecycle.viewModelScope
 import com.hechikasoft.jaaculator.presentation.base.BaseViewModel
 import com.hechikasoft.jaaculator.presentation.base.ViewIntent
 import com.hechikasoft.jaaculator.presentation.base.ViewState
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.hechikasoft.jaaculator.presentation.memberlist.composable.exampleUiState
 
-class MemberListViewModel:BaseViewModel<MemberContract.Intent, MemberContract.State, MemberContract.Effect>() {
+class MemberListViewModel : BaseViewModel<MemberListContract.Intent, MemberListContract.State, MemberListContract.Effect>() {
     override fun createInitialState(): ViewState {
-        return MemberContract.State(
-            MemberContract.RandomNumberState.Idle
-        )
+//        return MemberListContract.State(
+//            MemberListContract.RandomNumberState.Idle
+//        )
+        return exampleUiState
     }
 
     override fun handleIntent(intent: ViewIntent) {
         when (intent) {
-            is MemberContract.Intent.OnRandomNumberClicked -> { generateRandomNumber() }
-            is MemberContract.Intent.OnShowToastClicked -> {
-                setEffect { MemberContract.Effect.ShowToast }
+            is MemberListContract.Intent.OnRandomNumberClicked -> {
+                generateRandomNumber()
+            }
+            is MemberListContract.Intent.OnShowToastClicked -> {
+                setEffect { MemberListContract.Effect.ShowToast }
             }
         }
     }
