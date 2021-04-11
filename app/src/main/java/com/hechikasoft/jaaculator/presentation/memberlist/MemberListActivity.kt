@@ -8,7 +8,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.hechikasoft.jaaculator.presentation.memberlist.ui.theme.JaaculatorTheme
+import com.hechikasoft.jaaculator.ui.theme.JaaculatorTheme
 
 class MemberListActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
