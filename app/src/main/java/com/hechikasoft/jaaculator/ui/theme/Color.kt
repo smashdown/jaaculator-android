@@ -7,11 +7,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.unit.Dp
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
+//val Purple200 = Color(0xFFBB86FC)
+//val Purple500 = Color(0xFF6200EE)
+//val Purple700 = Color(0xFF3700B3)
 val Teal200 = Color(0xFF03DAC5)
 
+val Red = Color(0xFFE53935)
+val RedSecondary = Color(0XffB71C1C)
+
+val defaultTextColor = Color(0xff808080)
 
 /**
  * Return the fully opaque color that results from compositing [onSurface] atop [surface] with the

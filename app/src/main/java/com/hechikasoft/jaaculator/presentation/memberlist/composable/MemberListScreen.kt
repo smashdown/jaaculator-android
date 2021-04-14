@@ -3,52 +3,89 @@ package com.hechikasoft.jaaculator.presentation.memberlist.composable
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.materialIcon
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusState
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hechikasoft.jaaculator.R
 import com.hechikasoft.jaaculator.data.entity.MemberEntity
 import com.hechikasoft.jaaculator.presentation.common.CommonAppBar
 import com.hechikasoft.jaaculator.presentation.memberlist.MemberListContract
 import com.hechikasoft.jaaculator.ui.theme.JaaculatorTheme
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.Icon
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.collectAsState
-import com.hechikasoft.jaaculator.presentation.memberlist.MemberListViewModel
+import com.hechikasoft.jaaculator.ui.theme.Red
+import com.hechikasoft.jaaculator.ui.theme.defaultTextColor
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+
+
+@Preview(showBackground = true)
+@Composable
+fun MemberListPreview() {
+    JaaculatorTheme {
+        MemberListScreen(
+            uiStateFlow = MutableStateFlow(exampleUiState),
+            navigateToProfile = { }
+        )
+    }
+}
+
+@Composable
+fun MemberListScreen(
+    uiStateFlow: StateFlow<MemberListContract.State>,
+    navigateToProfile: (String) -> Unit,
+    onAddMemberClickListener: () -> Unit = { }
+) {
+    val scaffoldState = rememberScaffoldState()
+
+    Scaffold(
+        scaffoldState = scaffoldState,
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = onAddMemberClickListener,
+                backgroundColor = Red,
+                contentColor = Color.White
+            ) {
+                Icon(Icons.Filled.Add, "")
+            }
+        },
+        topBar = {
+            TopAppBar(
+                title = { Text("Add Members", color = defaultTextColor) },
+                backgroundColor = Color.White,
+                elevation = 0.dp
+            )
+        },
+    ) {
+        MemberListContent(
+            uiStateFlow = uiStateFlow,
+            navigateToProfile = navigateToProfile
+        )
+    }
+}
 
 /**
  * Entry point for a conversation screen.
@@ -59,46 +96,60 @@ import kotlinx.coroutines.flow.MutableStateFlow
  * @param onNavIconPressed Sends an event up when the user clicks on the menu
  */
 @Composable
-fun MemberListComposable(
-    navigateToProfile: (String) -> Unit,
-    modifier: Modifier = Modifier,
-    onNavIconPressed: () -> Unit = { }
+fun MemberListContent(
+    uiStateFlow: StateFlow<MemberListContract.State>,
+    navigateToProfile: (String) -> Unit
 ) {
-    val viewModel: MemberListViewModel = viewModel()
-    val uiState = viewModel.viewState.collectAsState().value
+    val uiState = uiStateFlow.collectAsState().value
     val authorMe = "authorMe" // stringResource(R.string.author_me)
     val timeNow = "now" // stringResource(id = R.string.now)
 
     val scrollState = rememberScrollState()
-    Surface(modifier = modifier) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            Column(Modifier.fillMaxSize()) {
-                Members(
-                    members = uiState.members,
-                    navigateToProfile = navigateToProfile,
-                    modifier = Modifier.weight(1f),
-                    scrollState = scrollState
-                )
-//                UserInput(
-//                    onMessageSent = { content ->
-//                        uiState.addMessage(
-//                            Message(authorMe, content, timeNow)
-//                        )
+    Surface(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize()) {
+//            MutatePriority.UserInput(
+//                onMessageSent = { content ->
+////                    uiState.addMessage(
+////                        Message(authorMe, content, timeNow)
+////                    )
+//                },
+//                scrollState = scrollState,
+//                // Use navigationBarsWithImePadding(), to move the input panel above both the
+//                // navigation bar, and on-screen keyboard (IME)
+//                // modifier = Modifier.navigationBarsWithImePadding(),
+//            )
+//            BasicTextField(
+//                value = "textFieldValue",
+//                onValueChange = { //onTextChanged(it)
+//                },
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(start = 16.dp)
+////                    .align(Alignment.CenterStart)
+//                    .onFocusChanged { state ->
+////                        if (lastFocusState != state) {
+////                            onTextFieldFocused(state == FocusState.Active)
+////                        }
+////                        lastFocusState = state
 //                    },
-//                    scrollState = scrollState,
-//                    // Use navigationBarsWithImePadding(), to move the input panel above both the
-//                    // navigation bar, and on-screen keyboard (IME)
-//                    modifier = Modifier.navigationBarsWithImePadding(),
-//                )
+////                keyboardOptions = KeyboardOptions(
+////                    keyboardType = keyboardType,
+////                    imeAction = ImeAction.Send
+////                ),
+//                maxLines = 1,
+//                cursorBrush = SolidColor(LocalContentColor.current),
+//                textStyle = LocalTextStyle.current.copy(color = LocalContentColor.current)
+//            )
+            Box(modifier = Modifier.fillMaxSize()) {
+                Column(Modifier.fillMaxSize()) {
+                    Members(
+                        members = uiState.members,
+                        navigateToProfile = navigateToProfile,
+                        modifier = Modifier.weight(1f),
+                        scrollState = scrollState
+                    )
+                }
             }
-            // Channel name bar floats above the messages
-            ChannelNameBar(
-                channelName = uiState.channelName,
-                channelMembers = uiState.channelMembers,
-                onNavIconPressed = onNavIconPressed,
-                // Use statusBarsPadding() to move the app bar content below the status bar
-                // modifier = Modifier.statusBarsPadding(),
-            )
         }
     }
 }
@@ -166,10 +217,8 @@ fun Members(
     scrollState: ScrollState,
     modifier: Modifier = Modifier
 ) {
-
     val scope = rememberCoroutineScope()
     Box(modifier = modifier) {
-
         Column(
             modifier = Modifier
                 .testTag(ConversationTestTag)
@@ -413,24 +462,6 @@ fun Member(
 //    )
 //}
 
-@Preview
-@Composable
-fun ConversationPreview() {
-    JaaculatorTheme {
-        MemberListComposable(
-            uiStateFlow = MutableStateFlow(exampleUiState),
-            navigateToProfile = { }
-        )
-    }
-}
-
-@Preview
-@Composable
-fun channelBarPrev() {
-    JaaculatorTheme {
-        ChannelNameBar(channelName = "composers", channelMembers = 52)
-    }
-}
 
 @Preview
 @Composable

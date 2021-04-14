@@ -26,7 +26,8 @@ fun CommonAppBar(
     modifier: Modifier = Modifier,
     onNavIconPressed: () -> Unit = { },
     title: @Composable RowScope.() -> Unit,
-    actions: @Composable RowScope.() -> Unit = {}
+    actions: @Composable RowScope.() -> Unit = {},
+    showHome: Boolean = false
 ) {
     // This bar is translucent but elevation overlays are not applied to translucent colors.
     // Instead we manually calculate the elevated surface color from the opaque color,
@@ -38,6 +39,10 @@ fun CommonAppBar(
     Column(
         Modifier.background(backgroundColor.copy(alpha = 0.95f))
     ) {
+//        TopAppBar(
+//            title = { Row { title() } },
+//            backgroundColor = Color.White
+//        )
         TopAppBar(
             modifier = modifier,
             backgroundColor = Color.Transparent,
@@ -46,13 +51,17 @@ fun CommonAppBar(
             actions = actions,
             title = { Row { title() } }, // https://issuetracker.google.com/168793068
             navigationIcon = {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_launcher_background),
-                    contentDescription = "navigate",
-                    modifier = Modifier
-                        .clickable(onClick = onNavIconPressed)
-                        .padding(horizontal = 16.dp)
-                )
+                if (showHome) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_launcher_background),
+                        contentDescription = "navigate",
+                        modifier = Modifier
+                            .clickable(onClick = onNavIconPressed)
+                            .padding(horizontal = 16.dp)
+                    )
+                } else {
+                    null
+                }
             }
         )
         Divider()

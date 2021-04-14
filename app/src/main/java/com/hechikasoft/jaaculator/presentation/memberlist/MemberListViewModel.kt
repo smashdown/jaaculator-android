@@ -4,8 +4,13 @@ import com.hechikasoft.jaaculator.presentation.base.BaseViewModel
 import com.hechikasoft.jaaculator.presentation.base.ViewIntent
 import com.hechikasoft.jaaculator.presentation.base.ViewState
 import com.hechikasoft.jaaculator.presentation.memberlist.composable.exampleUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class MemberListViewModel : BaseViewModel<MemberListContract.Intent, MemberListContract.State, MemberListContract.Effect>() {
+@HiltViewModel
+class MemberListViewModel @Inject constructor(
+
+) : BaseViewModel<MemberListContract.Intent, MemberListContract.State, MemberListContract.Effect>() {
     override fun createInitialState(): ViewState {
 //        return MemberListContract.State(
 //            MemberListContract.RandomNumberState.Idle
@@ -20,6 +25,9 @@ class MemberListViewModel : BaseViewModel<MemberListContract.Intent, MemberListC
             }
             is MemberListContract.Intent.OnShowToastClicked -> {
                 setEffect { MemberListContract.Effect.ShowToast }
+            }
+            is MemberListContract.Intent.OnAddMemberClicked -> {
+                setEffect { MemberListContract.Effect.ShowAddMemberPopup }
             }
         }
     }

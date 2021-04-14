@@ -9,6 +9,7 @@ class MemberListContract {
 
     // Events that user performed
     sealed class Intent : ViewIntent {
+        object OnAddMemberClicked: Intent()
         object OnRandomNumberClicked : Intent()
         object OnShowToastClicked : Intent()
     }
@@ -31,6 +32,7 @@ class MemberListContract {
     // Side effects
     sealed class Effect : ViewEffect {
         object ShowToast : Effect()
+        object ShowAddMemberPopup: Effect()
     }
 
 }
