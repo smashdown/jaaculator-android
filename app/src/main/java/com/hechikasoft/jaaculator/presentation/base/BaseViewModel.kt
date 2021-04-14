@@ -10,6 +10,7 @@ interface ViewState
 interface ViewIntent
 interface ViewEffect
 
+// https://github.com/yusufceylan/MVI-Playground
 abstract class BaseViewModel<intent : ViewIntent, state : ViewState, effect : ViewEffect> : ViewModel() {
 
     // Create Initial State of View
